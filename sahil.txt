@@ -1,7 +1,4 @@
-<<<<<<< 
-hii , this is secound line
-======= Head
 hii this is first line
+hii, this is secound line
 
->>>>>>> new
 
