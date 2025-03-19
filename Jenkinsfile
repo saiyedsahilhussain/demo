@@ -19,9 +19,9 @@ pipeline {
     }
     stage("build image"){
       steps{  
-       withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
-        sh 'docker build -t demoimage1.0 .'
+         withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+          sh "echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin"
+          sh 'docker build -t demoimage1.0 .'
 }
 '
       }
