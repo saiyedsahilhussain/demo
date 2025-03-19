@@ -23,7 +23,7 @@ pipeline {
           sh "echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin"
           sh 'docker build -t demoimage1.0 .'
 }
-'
+
       }
     }
     stage("Push image"){
