@@ -1,5 +1,10 @@
 pipeline {
   agent any
+
+  environment {
+         credentialsId : 'sonar-cred'  // Ensure this is your SonarQube token ID in Jenkins credentials
+        scannerHome = tool 'sonarQube-scanner'  // SonarQube Scanner tool name as per your Jenkins setup
+    }
   stages {
     stage("checkout") {
       steps {
@@ -18,7 +23,7 @@ pipeline {
     }
     stage("SonarQube analysis") {
       steps {
-        withSonarQubeEnv('sonarqube-server') {  // Use your SonarQube server name here
+        withSonarQubeEnv('sonarQube-server') {  // Use your SonarQube server name here
           sh '${scannerHome}/bin/sonar-scanner'
         }
       }
