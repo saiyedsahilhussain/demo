@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        scannerHome = tool 'sonarqube-scanner' 
+        scannerHome = tool 'sonarqube-scanner'  // Assumes 'sonarqube-scanner' is defined as a global tool in Jenkins
     }
     stages {
         stage('Checkout') {
@@ -12,7 +12,7 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-server') {  // Use your SonarQube server name here
-                    sh  '${scannerHome}/bin/sonar-scanner'
+                    sh  "${scannerHome}/bin/sonar-scanner"  // Double quotes for variable interpolation
                 }
             }
         }
