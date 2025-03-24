@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        SONARQUBE_URL = 'https://sonarcloud.io/'
+        scannerHome = tool 'sonarqube-scanner' 
     }
     stages {
         stage('Checkout') {
@@ -9,17 +9,21 @@ pipeline {
                 checkout scm
             }
         }
-        stage('SonarQube Analysis') {
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube-server') {  // Use your SonarQube server name here
+                    sh  '${scannerHome}/bin/sonar-scanner'
+                }
+            }
+        }
+        stage('Quality Gate') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'sonar-cred', variable: 'SONAR_TOKEN')]) {
-                        sh """
-                            sonar-scanner \
-                                -Dsonar.projectKey=inspire \
-                                -Dsonar.sources=. \
-                                -Dsonar.host.url=$SONARQUBE_URL \
-                                -Dsonar.login=$SONAR_TOKEN
-                        """
+                    timeout(time: 1, unit: 'HOURS') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
                     }
                 }
             }
