@@ -11,7 +11,7 @@ pipeline {
         }
         stage('SonarQube analysis') {
             steps {
-                withSonarQubeEnv('sonarqube-server') {  // Use your SonarQube server name here
+                withSonarQubeEnv('sonarQube-server') {  // Use your SonarQube server name here
                     sh  "${scannerHome}/bin/sonar-scanner"  // Double quotes for variable interpolation
                 }
             }
