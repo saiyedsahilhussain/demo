@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Run tests
+      - name: Run tests
+        run: npm test
+
+      # Build Docker image
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: sahilhussain12/demoGA:latest
+
+      - name: deploy to ec2 
+        run: |
+        sudo su -  
+        docker pull sahilhussain12/demoGA:latest
+        docker run -d --name democont -p 80:80 sahilhussain12/demoGA:latest
+
