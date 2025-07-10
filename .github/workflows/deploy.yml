@@ -49,4 +49,4 @@ jobs:
             docker pull sahilhussain12/demo:latest
             docker stop democont || true
             docker rm democont || true
-            docker run -d --name democont -p 80:3000 sahilhussain12/demoGA:latest
+            docker run -d --name democont -p 80:3000 sahilhussain12/demo:latest
