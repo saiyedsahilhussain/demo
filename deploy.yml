@@ -39,9 +39,14 @@ jobs:
           push: true
           tags: sahilhussain12/demoGA:latest
 
-      - name: deploy to ec2 
-        run: |
-        sudo su -  
-        docker pull sahilhussain12/demoGA:latest
-        docker run -d --name democont -p 80:80 sahilhussain12/demoGA:latest
-
+     - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull sahilhussain12/demoGA:latest
+            docker stop democont || true
+            docker rm democont || true
+            docker run -d --name democont -p 80:3000 sahilhussain12/demoGA:latest
